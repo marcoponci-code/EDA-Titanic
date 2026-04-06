@@ -1,3 +1,15 @@
+"""
+Titanic Dataset - Exploratory Data Analysis (EDA)
+Author: Marco Antonio Ponciano
+
+Description
+-----------
+Este script foi criado transformar a análise deste repositório em uma entrega acionável
+criando um dashboard interativo utilizando Streamlit.
+
+Script Author: Bruno Soares de Souza
+"""
+
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -30,21 +42,26 @@ try:
     # Filtrando o dataframe com base na sidebar
     df_filtrado = titanic[titanic["sexo"].isin(sexo_selecionado)]
 
-    # --- MÉTRICAS PRINCIPAIS ---
+    # MÉTRICAS PRINCIPAIS
+
+    # Total de Passageiros
     col1, col2, col3 = st.columns(3)
     col1.metric("Total de Passageiros", len(df_filtrado))
     
+    # Taxa de Sobrevivência
     sobreviventes_pct = (df_filtrado["sobreviveu"] == "sim").mean() * 100
     col2.metric("Taxa de Sobrevivência", f"{sobreviventes_pct:.1f}%")
     
+    # Idade Média de passageiros
     idade_media = df_filtrado["idade"].mean()
     col3.metric("Idade Média", f"{idade_media:.1f} anos")
 
     st.divider()
 
-    # --- GRÁFICOS ---
+    # GRÁFICOS
     tab1, tab2, tab3 = st.tabs(["Distribuição", "Sobrevivência", "Estatísticas"])
 
+    # Distribuição de Idade e Tarifas
     with tab1:
         st.subheader("Distribuição de Idade e Tarifas")
         fig1, ax1 = plt.subplots(1, 2, figsize=(12, 4))
@@ -58,6 +75,7 @@ try:
         
         st.pyplot(fig1)
 
+    # Análise de sobrevivência
     with tab2:
         st.subheader("Análise de Sobrevivência")
         fig2, ax2 = plt.subplots(1, 2, figsize=(12, 4))
@@ -70,6 +88,7 @@ try:
         
         st.pyplot(fig2)
 
+    # Dados Brutos e Resumo
     with tab3:
         st.subheader("Dados Brutos e Resumo")
         st.write(df_filtrado.describe())
@@ -79,3 +98,5 @@ try:
 except Exception as e:
     st.error(f"Erro ao carregar o arquivo: {e}")
     st.info("Certifique-se de que o arquivo 'titanic.xlsx' está na mesma pasta que este script.")
+
+# Digite para carregar o dashboard localmente: streamlit run app.py   
